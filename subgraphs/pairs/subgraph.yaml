@@ -1,0 +1,30 @@
+specVersion: 0.0.2
+description: Track Pairs and Tokens on PancakeSwap (v2) protocol
+repository: https://github.com/pancakeswap
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Factory
+    network: bsc
+    source:
+      address: '0x90b7E5854a856e56B3a0a45c742EbC9AD55738F1'
+      abi: Factory
+      startBlock: 18134639
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/factory.ts
+      entities:
+        - Factory
+        - Token
+        - Pair
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handlePairCreated
